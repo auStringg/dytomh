@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.qiujf.pulsoid.mapper.PulsoidBaseMapper">
+
+    <resultMap id="BaseResultMap" type="org.qiujf.pulsoid.PulsoidBase">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+        <result property="heartrate" column="heartRate" jdbcType="INTEGER"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="userid" column="userid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,start_time,heartRate,
+        end_time,userid
+    </sql>
+
+
+    <select id="getMaxPulsoid" resultType="org.qiujf.pulsoid.PulsoidBase">
+        select id,
+               start_time,
+               heartRate,
+               end_time,
+               userid
+        from pulsoid_base
+        where id = (select max(id) from pulsoid_base)
+    </select>
+</mapper>
