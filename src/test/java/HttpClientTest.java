@@ -23,8 +23,6 @@ public class HttpClientTest {
             HttpEntity entity = response1.getEntity();
             String result = EntityUtils.toString(entity,"UTF-8");
             System.out.println(result);
-
-            EntityUtils.consume(entity);
         } finally {
             response1.close();
         }

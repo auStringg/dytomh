@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class JsonUtil {
-    public static  <T> T  paseJson(T t, String json) throws JsonProcessingException {
+    public static  <T> T  paseJson(Class<T> t, String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return (T) objectMapper.readValue(json,t.getClass());
+        return (T) objectMapper.readValue(json,t);
     }
     public static <T> String toJson(T t) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
