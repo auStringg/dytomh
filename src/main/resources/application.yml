@@ -4,6 +4,10 @@ spring:
     username: kyle
     password: ozi3enjvx662
     driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+    suffix: .html
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
@@ -13,3 +17,5 @@ mybatis-plus:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         mybatis-plus:
           type-aliases-package: org.qiujf
+server:
+  port: 56000
