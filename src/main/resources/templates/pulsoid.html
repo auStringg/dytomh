@@ -130,12 +130,35 @@
         // Display the chart using the configuration items and data just specified.
         myChart.setOption(option);
         myChart.off('click');
-        myChart.on('click',  function(param) {
-            //param.name x轴值,param.data y轴值
-            var replace = param.name.replace(" ","T");
-            $("#startDate").val(replace);
-            queryPulsoidData();
-        });
+        // myChart.on('click',  function(param) {
+        //     //param.name x轴值,param.data y轴值
+        //     var replace = param.name.replace(" ","T");
+        //     $("#startDate").val(replace);
+        //     queryPulsoidData();
+        // });
+
+        myChart.getZr().on('click', params => {
+            const pointInPixel = [params.offsetX, params.offsetY]
+            // 使用 convertFromPixel方法 转换像素坐标值到逻辑坐标系上的点。获取点击位置对应的x轴数据的索引         值，借助于索引值的获取到其它的信息
+            let pointInGrid = myChart.convertFromPixel({ seriesIndex: 0 }, pointInPixel)
+
+            // x轴数据的索引值
+            let xIndex = pointInGrid[0]
+
+            // 使用getOption() 获取图表的option
+            let op = myChart.getOption()
+
+            // 获取当前点击位置要的数据
+            var xData = op.series[0].data[xIndex]
+            var time  = op.xAxis[0].data[xIndex];
+            if(time != undefined && time != ''){
+                var replace = time.replace(" ","T");
+                $("#startDate").val(replace);
+                queryPulsoidData();
+            }
+
+            console.log(xData + "  " + time);
+        })
     }
 
 </script>
