@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@MapperScan("org.qiujf.pulsoid.mapper")
+@MapperScan("org.qiujf.**.mapper")
 @EnableScheduling
 public class LearnApplication {
     public static void main(String[] args) {

@@ -89,39 +89,5 @@ public class PulsoidController {
     }
 
 
-    @Scheduled(cron = "0/2 * * * * *")
-    public void cron() throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("https://dev.pulsoid.net/api/v1/data/heart_rate/latest");
-        httpGet.addHeader("Authorization", "Bearer b3ae8b07-533d-472e-9fd0-10d610db393d");
-        CloseableHttpResponse response1 = httpclient.execute(httpGet);
-        Pulsoid pulsoid;
-        try {
 
-            HttpEntity entity = response1.getEntity();
-            String result = EntityUtils.toString(entity, "UTF-8");
-            pulsoid = JsonUtil.paseJson(Pulsoid.class, result);
-
-        } finally {
-            response1.close();
-        }
-        if (pulsoid != null && pulsoid.getHearRate() != null) {
-            PulsoidBase maxPulsoid = pulsoidBaseService.getMaxPulsoid();
-            if(needChangeEndTime(pulsoid, maxPulsoid)){
-                maxPulsoid.setEndTime(new Date());
-                pulsoidBaseService.updateById(maxPulsoid);
-            }else{
-                PulsoidBase pulsoidBase = new PulsoidBase();
-                pulsoidBase.setStartTime(new Date());
-                pulsoidBase.setEndTime(new Date());
-                pulsoidBase.setUserid(1);
-                pulsoidBase.setHeartrate(pulsoid.getHearRate());
-                pulsoidBaseService.save(pulsoidBase);
-            }
-        }
-    }
-
-    private boolean needChangeEndTime(Pulsoid pulsoid, PulsoidBase maxPulsoid) {
-        return maxPulsoid != null && (Math.abs(maxPulsoid.getHeartrate() - pulsoid.getHearRate()) <2);
-    }
 }
