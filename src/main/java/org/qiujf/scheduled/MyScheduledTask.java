@@ -79,9 +79,9 @@ public class MyScheduledTask {
      * 每天0点签到
      * @throws IOException
      */
-    @Scheduled(cron = "1 1 0 * * *")
+    @Scheduled(cron = "1 29 1 * * *")
     public void autoSign() throws IOException {
-
+        System.out.println("----------------------------------开始签到任务-------------------------");
         List<Autotask> list = autotaskService.list();
         List<HttpTaskVo> vos = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -115,7 +115,6 @@ public class MyScheduledTask {
             System.out.println(response1.getStatusLine());
             HttpEntity entity = response1.getEntity();
             String result = EntityUtils.toString(entity, "UTF-8");
-            System.out.println(result);
         } finally {
             response1.close();
         }
