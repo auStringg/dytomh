@@ -18,6 +18,7 @@ import org.qiujf.scheduled.entity.Autotask;
 import org.qiujf.scheduled.service.AutoTaskParamService;
 import org.qiujf.scheduled.service.AutotaskService;
 import org.qiujf.scheduled.vo.HttpTaskVo;
+import org.qiujf.utils.HttpUtil;
 import org.qiujf.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,6 +28,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class MyScheduledTask {
@@ -77,19 +81,19 @@ public class MyScheduledTask {
 
     /**
      * 每天0点签到
-     * @throws IOException
+     *
      */
-    @Scheduled(cron = "1 56 17 * * *")
+    @Scheduled(cron = "1 1 0 * * *")
     public void autoSign() throws IOException {
         System.out.println("----------------------------------开始签到任务-------------------------");
         List<Autotask> list = autotaskService.list();
         List<HttpTaskVo> vos = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
+        for (Autotask autotask : list) {
             List<Header> headers = new ArrayList<>();
             HttpTaskVo httpTaskVo = new HttpTaskVo();
-            httpTaskVo.setUri(list.get(i).getUrl());
+            httpTaskVo.setUri(autotask.getUrl());
             QueryWrapper<AutoTaskParam> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("taskid", list.get(i).getId());
+            queryWrapper.eq("taskid", autotask.getId());
             List<AutoTaskParam> list1 = autoTaskParamService.list(queryWrapper);
             for (AutoTaskParam autoTaskParam : list1) {
                 BasicHeader basicHeader = new BasicHeader(autoTaskParam.getName(), autoTaskParam.getValue());
@@ -99,25 +103,50 @@ public class MyScheduledTask {
             vos.add(httpTaskVo);
         }
         //执行
+        List<HttpTaskVo> urls = new ArrayList<>();
         for (HttpTaskVo vo : vos) {
-            httpClientRun(vo);
+            if (HttpUtil.httpClientReturnSuccess(vo)) {
+                urls.add(vo);
+            }
+        }
+        if (urls.size() > 0) {
+            retrySign(urls);
         }
 
     }
 
-    private void httpClientRun(HttpTaskVo vo) throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(vo.getUri());
-        vo.getHeaders().forEach(v -> httpGet.addHeader(v));
+    private void retrySign(List<HttpTaskVo> urls) {
+        System.out.println("签到失败个数：" + urls.size());
+        System.out.println("失败url:");
+        for (HttpTaskVo vo : urls) {
+            System.out.println(vo.getUri());
 
-        CloseableHttpResponse response1 = httpclient.execute(httpGet);
-        try {
-            System.out.println(vo.getUri() +"   " + response1.getStatusLine());
-            HttpEntity entity = response1.getEntity();
-            String result = EntityUtils.toString(entity, "UTF-8");
-        } finally {
-            response1.close();
+            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.schedule(() -> {
+                try {
+                    singerSignTask(vo, 1);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 60, TimeUnit.SECONDS);
+            executorService.shutdown();
+
         }
+    }
 
+    private void singerSignTask(HttpTaskVo vo, int reTry) throws IOException {
+        System.out.println(vo.getUri() + " 第" + reTry + "次重试");
+        //执行
+        if (HttpUtil.httpClientReturnSuccess(vo) && reTry < 3) {
+            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.schedule(() -> {
+                try {
+                    singerSignTask(vo, reTry + 1);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 3600, TimeUnit.SECONDS);
+            executorService.shutdown();
+        }
     }
 }
