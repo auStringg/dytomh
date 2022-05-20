@@ -79,7 +79,7 @@ public class MyScheduledTask {
      * 每天0点签到
      * @throws IOException
      */
-    @Scheduled(cron = "1 29 1 * * *")
+    @Scheduled(cron = "1 56 17 * * *")
     public void autoSign() throws IOException {
         System.out.println("----------------------------------开始签到任务-------------------------");
         List<Autotask> list = autotaskService.list();
@@ -112,7 +112,7 @@ public class MyScheduledTask {
 
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
         try {
-            System.out.println(response1.getStatusLine());
+            System.out.println(vo.getUri() +"   " + response1.getStatusLine());
             HttpEntity entity = response1.getEntity();
             String result = EntityUtils.toString(entity, "UTF-8");
         } finally {
