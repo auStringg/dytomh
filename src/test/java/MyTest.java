@@ -16,8 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SpringBootTest(classes = LearnApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -134,7 +133,52 @@ public class MyTest {
 
     @Test
     public void test() {
-        System.out.println("/in" + "dex.php?action=addbonus&__SAKURA=32bf1cb64" + "d" + "1645c" + " c877" + "6c83" + "b6f6d" + "7dee0" + "165306" + "1005_764491" + "1");
+
+    }
+
+    @Test
+    public void asteroidCollision() {
+
+        System.out.println(tranBinary("110"));
+        System.out.println(tranBinary(13));
+
+    }
+
+    public int tranBinary(String s) {
+
+        int ret = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            ret = ret * 2 + (c - '0');
+        }
+
+        return ret;
+    }
+
+    public String tranBinary(int num) {
+        String ret = "";
+        while (num != 0) {
+            int i = num % 2;
+            num = num /2;
+            ret = i + ret;
+        }
+        return ret;
+    }
+    public String addBinary(String a, String b) {
+        String ret = "";
+        int flag = 0;
+        if(a.length() <b.length()){
+            String c = a;
+            a = b;
+            b = c;
+        }
+        for (int i = a.length(); i > 0  ; i--) {
+
+
+        }
+
+
+        return ret.equals("") ? "0" : ret;
     }
 
 

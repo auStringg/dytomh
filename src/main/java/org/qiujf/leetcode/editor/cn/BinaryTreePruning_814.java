@@ -1,0 +1,38 @@
+//二叉树剪枝
+package org.qiujf.leetcode.editor.cn;
+
+public class BinaryTreePruning_814{
+      public static void main(String[] args) {
+           Solution solution = new BinaryTreePruning_814().new Solution();
+      }
+      //leetcode submit region begin(Prohibit modification and deletion)
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode pruneTree(TreeNode root) {
+        if(root == null) return root;
+        root.left = pruneTree(root.left);
+        root.right = pruneTree(root.right);
+        if(root.left == null && root.right == null && root.val == 0){
+            root = null;
+        }
+        return root;
+    }
+
+}
+//leetcode submit region end(Prohibit modification and deletion)
+
+  }
