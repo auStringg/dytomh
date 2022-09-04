@@ -34,7 +34,7 @@ public class MyTest {
      */
     @Test
     public void testSingerTask() throws IOException {
-        Autotask autotask = autotaskService.getById(2);
+        Autotask autotask = autotaskService.getById(4);
 
         List<Header> headers = new ArrayList<>();
         HttpTaskVo httpTaskVo = new HttpTaskVo();
@@ -102,29 +102,33 @@ public class MyTest {
     public void insertHeaderData() {
         List<AutoTaskParam> autoTaskParams = new ArrayList<>();
         String s = """
-                accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-                accept-encoding: gzip, deflate, br
-                accept-language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
-                cookie: c_secure_uid=ODcwNTQ%3D; c_secure_pass=bf4125fc4fc9c474a40f2403327994a1; c_secure_ssl=eWVhaA%3D%3D; c_secure_tracker_ssl=eWVhaA%3D%3D; c_secure_login=bm9wZQ%3D%3D; cf_clearance=mI3a5Vk6SDGggAJ_jjDxNNb4yd6XYW37fB9OExfLbXk-1644847067-0-150
-                referer: https://pt.btschool.club/index.php
-                sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Microsoft Edge";v="101"
-                sec-ch-ua-mobile: ?0
-                sec-ch-ua-platform: "Windows"
-                sec-fetch-dest: document
-                sec-fetch-mode: navigate
-                sec-fetch-site: same-origin
-                sec-fetch-user: ?1
-                upgrade-insecure-requests: 1
-                user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.47
+                :authority: www.pttime.org
+               :method: GET
+               :path: /attendance.php
+               :scheme: https
+               accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+               accept-encoding: gzip, deflate, br
+               accept-language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
+               cookie: c_secure_uid=MjQxNDQ%3D; c_secure_pass=e8a4c526e3146993726772b2a86b37f4; c_secure_ssl=eWVhaA%3D%3D; c_secure_tracker_ssl=eWVhaA%3D%3D; c_secure_login=bm9wZQ%3D%3D
+               referer: https://www.pttime.org/
+               sec-ch-ua: " Not;A Brand";v="99", "Microsoft Edge";v="103", "Chromium";v="103"
+               sec-ch-ua-mobile: ?0
+               sec-ch-ua-platform: "Windows"
+               sec-fetch-dest: document
+               sec-fetch-mode: navigate
+               sec-fetch-site: same-origin
+               sec-fetch-user: ?1
+               upgrade-insecure-requests: 1
+               user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.62
                                 """;
         String[] split = s.split("\n");
         for (String s1 : split) {
             String[] header = s1.split(": ");
             AutoTaskParam autoTaskParam = new AutoTaskParam();
-            autoTaskParam.setTaskid(2);
+            autoTaskParam.setTaskid(4);
             autoTaskParam.setType("header");
-            autoTaskParam.setName(header[0]);
-            autoTaskParam.setValue(header[1]);
+            autoTaskParam.setName(header[0].trim());
+            autoTaskParam.setValue(header[1].trim());
             autoTaskParams.add(autoTaskParam);
         }
         System.out.println(split.length);
@@ -179,6 +183,17 @@ public class MyTest {
 
 
         return ret.equals("") ? "0" : ret;
+    }
+
+    @Test
+    public  void raplacePrint(){
+        String s = "差错月份、执行退补月份、原峰平谷标志、现峰平谷标志、原蓄冷标志、现蓄冷标志、计量点编号、企业编号、企业名称、售电公司编号、售电公司名称、审批状态、原实际用电量、原峰电量、原平电量、原谷电量、差错峰电量、差错平电量、差错谷电量、修正峰电量、修正平电量、修正谷电量、零售用户原电费、零售用户修正电费、零售退补电费、售电公司退补电费";
+        String tmp = ", {\"data#num\": \"MONTH\", \"title\": \"#name\"}";
+        int i = 0;
+        for (String s1 : Arrays.asList(s.split("、"))) {
+
+            System.out.println(tmp.replaceAll("#num",i+++"").replaceAll("#name", s1));
+        }
     }
 
 
