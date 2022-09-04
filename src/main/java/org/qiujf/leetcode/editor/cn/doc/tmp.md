@@ -12,4 +12,5 @@ package org.qiujf.leetcode.editor.cn;
   }
 ```
 
-![img.png](img.png)
+
+![/img/img.png](img.png)
