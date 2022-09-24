@@ -15,8 +15,10 @@ import org.qiujf.pulsoid.PulsoidBase;
 import org.qiujf.pulsoid.service.PulsoidBaseService;
 import org.qiujf.scheduled.entity.AutoTaskParam;
 import org.qiujf.scheduled.entity.Autotask;
+import org.qiujf.scheduled.entity.Autotasklog;
 import org.qiujf.scheduled.service.AutoTaskParamService;
 import org.qiujf.scheduled.service.AutotaskService;
+import org.qiujf.scheduled.service.AutotasklogService;
 import org.qiujf.scheduled.vo.HttpTaskVo;
 import org.qiujf.utils.HttpUtil;
 import org.qiujf.utils.JsonUtil;
@@ -41,6 +43,8 @@ public class MyScheduledTask {
     AutotaskService autotaskService;
     @Autowired
     AutoTaskParamService autoTaskParamService;
+    @Autowired
+    AutotasklogService autotasklogService;
 
     //pro已经过期了，无法使用
     // @Scheduled(cron = "0/2 * * * * *")
@@ -147,6 +151,15 @@ public class MyScheduledTask {
                 }
             }, 3600, TimeUnit.SECONDS);
             executorService.shutdown();
+        }else{
+            if(reTry>=3){
+                System.out.println("url:"+vo.getUri()+"重试失败！");
+                //todo 这里加上记录数据库日志
+                Autotasklog autotasklog = new Autotasklog();
+                autotasklog.setUrl(vo.getUri());
+                autotasklog.setTime(new Date());
+                autotasklogService.save(autotasklog);
+            }
         }
     }
 }

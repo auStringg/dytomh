@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.qiujf.LearnApplication;
 import org.qiujf.pulsoid.service.PulsoidBaseService;
+import org.qiujf.scheduled.MyScheduledTask;
 import org.qiujf.scheduled.entity.AutoTaskParam;
 import org.qiujf.scheduled.entity.Autotask;
 import org.qiujf.scheduled.service.AutoTaskParamService;
@@ -17,9 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(classes = LearnApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
 @RunWith(SpringRunner.class)
 public class MyTest {
     @Autowired
@@ -28,6 +31,8 @@ public class MyTest {
     PulsoidBaseService pulsoidBaseService;
     @Autowired
     AutoTaskParamService autoTaskParamService;
+    @Autowired
+    MyScheduledTask myScheduledTask;
 
     /**
      * 测试单个任务运行情况
@@ -91,9 +96,19 @@ public class MyTest {
                 System.out.println(vo.getUri());
 
             }
+            System.out.println("重试----");
+
         }
 
     }
+
+    @Test
+    public void testLog() throws IOException {
+
+
+        myScheduledTask.autoSign();
+    }
+
 
     /**
      * 插入header数据
@@ -102,30 +117,29 @@ public class MyTest {
     public void insertHeaderData() {
         List<AutoTaskParam> autoTaskParams = new ArrayList<>();
         String s = """
-                :authority: www.pttime.org
-               :method: GET
-               :path: /attendance.php
-               :scheme: https
-               accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-               accept-encoding: gzip, deflate, br
-               accept-language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
-               cookie: c_secure_uid=MjQxNDQ%3D; c_secure_pass=e8a4c526e3146993726772b2a86b37f4; c_secure_ssl=eWVhaA%3D%3D; c_secure_tracker_ssl=eWVhaA%3D%3D; c_secure_login=bm9wZQ%3D%3D
-               referer: https://www.pttime.org/
-               sec-ch-ua: " Not;A Brand";v="99", "Microsoft Edge";v="103", "Chromium";v="103"
-               sec-ch-ua-mobile: ?0
-               sec-ch-ua-platform: "Windows"
-               sec-fetch-dest: document
-               sec-fetch-mode: navigate
-               sec-fetch-site: same-origin
-               sec-fetch-user: ?1
-               upgrade-insecure-requests: 1
-               user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.62
+                accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+                accept-encoding: gzip, deflate, br
+                accept-language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
+                cookie: cf_clearance=D3jhwbiKwVfc0QCoIq8lmXCXMK_HsIzgLI4s9sNE.Iw-1660463584-0-150; tp=MDdmNjAyNDA2MjdkYmYyMWRhMmJlZDY5OTA5M2Q4OTBkY2U5NjI3Yw%3D%3D
+                referer: https://kp.m-team.cc/
+                sec-ch-ua: "Microsoft Edge";v="105", " Not;A Brand";v="99", "Chromium";v="105"
+                sec-ch-ua-mobile: ?0
+                sec-ch-ua-platform: "Windows"
+                sec-fetch-dest: document
+                sec-fetch-mode: navigate
+                sec-fetch-site: same-origin
+                sec-fetch-user: ?1
+                upgrade-insecure-requests: 1
+                user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33
                                 """;
+        //任务id
+        int taskid = 5;
+
         String[] split = s.split("\n");
         for (String s1 : split) {
             String[] header = s1.split(": ");
             AutoTaskParam autoTaskParam = new AutoTaskParam();
-            autoTaskParam.setTaskid(4);
+            autoTaskParam.setTaskid(taskid);
             autoTaskParam.setType("header");
             autoTaskParam.setName(header[0].trim());
             autoTaskParam.setValue(header[1].trim());
@@ -185,16 +199,7 @@ public class MyTest {
         return ret.equals("") ? "0" : ret;
     }
 
-    @Test
-    public  void raplacePrint(){
-        String s = "差错月份、执行退补月份、原峰平谷标志、现峰平谷标志、原蓄冷标志、现蓄冷标志、计量点编号、企业编号、企业名称、售电公司编号、售电公司名称、审批状态、原实际用电量、原峰电量、原平电量、原谷电量、差错峰电量、差错平电量、差错谷电量、修正峰电量、修正平电量、修正谷电量、零售用户原电费、零售用户修正电费、零售退补电费、售电公司退补电费";
-        String tmp = ", {\"data#num\": \"MONTH\", \"title\": \"#name\"}";
-        int i = 0;
-        for (String s1 : Arrays.asList(s.split("、"))) {
 
-            System.out.println(tmp.replaceAll("#num",i+++"").replaceAll("#name", s1));
-        }
-    }
 
 
 }

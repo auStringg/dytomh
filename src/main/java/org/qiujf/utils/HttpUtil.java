@@ -1,8 +1,10 @@
 package org.qiujf.utils;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -25,15 +27,21 @@ public class HttpUtil {
 
     }
 
-    public static boolean httpClientReturnSuccess(HttpTaskVo vo) throws IOException {
+    public static boolean httpClientReturnSuccess(HttpTaskVo vo)  {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(vo.getUri());
         vo.getHeaders().forEach(httpGet::addHeader);
-
+        System.out.print(vo.getUri()+" ");
         try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
-            System.out.println(vo.getUri() + "   " + response.getStatusLine());
+            System.out.println("  " + response.getStatusLine());
             return response.getStatusLine().getStatusCode() != 200;
+        }catch (HttpHostConnectException e){
+            System.out.println(e);
+        } catch (ClientProtocolException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println(e);
         }
-
+        return false;
     }
 }
