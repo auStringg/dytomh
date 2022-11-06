@@ -1,10 +1,42 @@
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyTest2 {
 
 
+
+    @Test
+    public void testJson() throws IOException {
+        File dir = new File("D:\\proj\\data");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File file = new File("D:\\proj\\data\\result.json");
+
+        Map value = objectMapper.readValue(file, Map.class);
+        System.out.println(value.size());
+
+    }
+
+    @Test
+    public void testJson2() throws IOException {
+        File dir = new File("D:\\proj\\data");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File file = new File("D:\\proj\\data\\car.json");
+        HashMap<String, String> map = new HashMap<>();
+        map.put("hello", "world");
+
+        objectMapper.writeValue(new FileOutputStream("D:\\proj\\data\\car.json"),map);
+
+    }
 
     @Test
     public  void test01(){

@@ -96,7 +96,6 @@ public class MyTest {
                 System.out.println(vo.getUri());
 
             }
-            System.out.println("重试----");
 
         }
 
