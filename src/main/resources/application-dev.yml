@@ -23,6 +23,6 @@ mybatis-plus:
         mybatis-plus:
           type-aliases-package: org.qiujf
 server:
-  port: 34001
+  port: 34002
 
 

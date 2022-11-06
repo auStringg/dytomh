@@ -15,10 +15,10 @@ import org.qiujf.pulsoid.PulsoidBase;
 import org.qiujf.pulsoid.service.PulsoidBaseService;
 import org.qiujf.scheduled.entity.AutoTaskParam;
 import org.qiujf.scheduled.entity.Autotask;
-import org.qiujf.scheduled.entity.Autotasklog;
+import org.qiujf.scheduled.entity.AutoTaskLog;
+import org.qiujf.scheduled.service.AutoTaskLogService;
 import org.qiujf.scheduled.service.AutoTaskParamService;
 import org.qiujf.scheduled.service.AutotaskService;
-import org.qiujf.scheduled.service.AutotasklogService;
 import org.qiujf.scheduled.vo.HttpTaskVo;
 import org.qiujf.utils.HttpUtil;
 import org.qiujf.utils.JsonUtil;
@@ -44,7 +44,7 @@ public class MyScheduledTask {
     @Autowired
     AutoTaskParamService autoTaskParamService;
     @Autowired
-    AutotasklogService autotasklogService;
+    AutoTaskLogService autotasklogService;
 
     //pro已经过期了，无法使用
     // @Scheduled(cron = "0/2 * * * * *")
@@ -88,7 +88,7 @@ public class MyScheduledTask {
      *
      */
     @Scheduled(cron = "1 1 0 * * *")
-    public void autoSign() throws IOException {
+    public void autoSign() {
         System.out.println("----------------------------------开始签到任务-------------------------");
         List<Autotask> list = autotaskService.list();
         List<HttpTaskVo> vos = new ArrayList<>();
@@ -124,38 +124,31 @@ public class MyScheduledTask {
         System.out.println("失败url:");
         for (HttpTaskVo vo : urls) {
             System.out.println(vo.getUri());
-
+            //60后重试
             ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
             executorService.schedule(() -> {
-                try {
-                    singerSignTask(vo, 1);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                singerSignTask(vo, 1);
             }, 60, TimeUnit.SECONDS);
             executorService.shutdown();
 
         }
     }
 
-    private void singerSignTask(HttpTaskVo vo, int reTry) throws IOException {
+    public void singerSignTask(HttpTaskVo vo, int reTry) {
         System.out.println(vo.getUri() + " 第" + reTry + "次重试");
         //执行
         if (HttpUtil.httpClientReturnSuccess(vo) && reTry < 3) {
+            //一个小时后重试
             ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
             executorService.schedule(() -> {
-                try {
-                    singerSignTask(vo, reTry + 1);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                singerSignTask(vo, reTry + 1);
             }, 3600, TimeUnit.SECONDS);
             executorService.shutdown();
         }else{
             if(reTry>=3){
                 System.out.println("url:"+vo.getUri()+"重试失败！");
                 //todo 这里加上记录数据库日志
-                Autotasklog autotasklog = new Autotasklog();
+                AutoTaskLog autotasklog = new AutoTaskLog();
                 autotasklog.setUrl(vo.getUri());
                 autotasklog.setTime(new Date());
                 autotasklogService.save(autotasklog);

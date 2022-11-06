@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@SpringBootTest(classes = LearnApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = LearnApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
 public class MyTest {
     @Autowired
@@ -33,6 +33,7 @@ public class MyTest {
     AutoTaskParamService autoTaskParamService;
     @Autowired
     MyScheduledTask myScheduledTask;
+
 
     /**
      * 测试单个任务运行情况
@@ -101,14 +102,6 @@ public class MyTest {
 
     }
 
-    @Test
-    public void testLog() throws IOException {
-
-
-        myScheduledTask.autoSign();
-    }
-
-
     /**
      * 插入header数据
      */
@@ -148,9 +141,31 @@ public class MyTest {
         autoTaskParamService.saveBatch(autoTaskParams);
     }
 
+    //所有任务运行
     @Test
-    public void test() {
+    public void testLog() throws IOException {
+        myScheduledTask.autoSign();
+    }
 
+
+
+
+    @Test
+    public void testLogInsert() {
+        Autotask autotask = autotaskService.getById(4);
+
+        List<Header> headers = new ArrayList<>();
+        HttpTaskVo httpTaskVo = new HttpTaskVo();
+        httpTaskVo.setUri(autotask.getUrl());
+        QueryWrapper<AutoTaskParam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("taskid", autotask.getId());
+        List<AutoTaskParam> list1 = autoTaskParamService.list(queryWrapper);
+        for (AutoTaskParam autoTaskParam : list1) {
+            BasicHeader basicHeader = new BasicHeader(autoTaskParam.getName(), autoTaskParam.getValue());
+            headers.add(basicHeader);
+        }
+        httpTaskVo.setHeaders(headers);
+        myScheduledTask.singerSignTask(httpTaskVo,3);
     }
 
     @Test

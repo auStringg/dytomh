@@ -28,19 +28,18 @@ public class HttpUtil {
     }
 
     public static boolean httpClientReturnSuccess(HttpTaskVo vo)  {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(vo.getUri());
-        vo.getHeaders().forEach(httpGet::addHeader);
-        System.out.print(vo.getUri()+" ");
-        try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
-            System.out.println("  " + response.getStatusLine());
-            return response.getStatusLine().getStatusCode() != 200;
-        }catch (HttpHostConnectException e){
-            System.out.println(e);
-        } catch (ClientProtocolException e) {
-            System.out.println(e);
+        try(CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            HttpGet httpGet = new HttpGet(vo.getUri());
+            vo.getHeaders().forEach(httpGet::addHeader);
+            System.out.print(vo.getUri() + " ");
+            try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+                System.out.println("  " + response.getStatusLine());
+                return response.getStatusLine().getStatusCode() != 200;
+            } catch (IOException e) {
+                System.out.println(e);
+            }
         } catch (IOException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
         return false;
     }
