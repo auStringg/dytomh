@@ -13,9 +13,9 @@ import org.apache.http.util.EntityUtils;
 import org.qiujf.pulsoid.Pulsoid;
 import org.qiujf.pulsoid.PulsoidBase;
 import org.qiujf.pulsoid.service.PulsoidBaseService;
+import org.qiujf.scheduled.entity.AutoTaskLog;
 import org.qiujf.scheduled.entity.AutoTaskParam;
 import org.qiujf.scheduled.entity.Autotask;
-import org.qiujf.scheduled.entity.AutoTaskLog;
 import org.qiujf.scheduled.service.AutoTaskLogService;
 import org.qiujf.scheduled.service.AutoTaskParamService;
 import org.qiujf.scheduled.service.AutotaskService;
@@ -147,10 +147,10 @@ public class MyScheduledTask {
         }else{
             if(reTry>=3){
                 System.out.println("url:"+vo.getUri()+"重试失败！");
-                //todo 这里加上记录数据库日志
                 AutoTaskLog autotasklog = new AutoTaskLog();
                 autotasklog.setUrl(vo.getUri());
                 autotasklog.setTime(new Date());
+                autotasklog.setType("sign error");
                 autotasklogService.save(autotasklog);
             }
         }

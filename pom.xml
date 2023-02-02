@@ -6,7 +6,12 @@
 
     <groupId>org.qiujf</groupId>
     <artifactId>learn</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>dytomhRedis</module>
+    </modules>
+
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
