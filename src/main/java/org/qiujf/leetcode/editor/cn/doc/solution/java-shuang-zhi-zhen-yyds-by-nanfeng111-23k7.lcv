@@ -1,0 +1,58 @@
+> Problem: [844. 比较含退格的字符串](https://leetcode.cn/problems/backspace-string-compare/description/)
+
+[TOC]
+
+# 思路
+
+> 讲述看到这一题的思路
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public boolean backspaceCompare(String s, String t) {
+        return Objects.equals(getString(s), getString(t));
+    }
+    public String getString(String str){
+        char[] chars = str.toCharArray();
+        int slowIndex = -1;
+        for (int fastIndex = 0; fastIndex <= chars.length-1; fastIndex++){
+            if (chars[fastIndex] != '#'){
+                slowIndex++;
+                if (chars[slowIndex] == '#'){
+                    char temp = chars[slowIndex];
+                    chars[slowIndex] = chars[fastIndex];
+                    chars[fastIndex] = temp;   
+                }
+            }else {
+                if (slowIndex != -1 && chars[slowIndex] != '#'){
+                    chars[slowIndex--] = chars[fastIndex];
+                }            
+            }
+        }
+        StringBuilder s = new StringBuilder();;
+        for (int i = 0 ; i < slowIndex+1; i++){
+            s.append(chars[i]);
+        }
+        return s.toString();
+    }
+}
+```
+

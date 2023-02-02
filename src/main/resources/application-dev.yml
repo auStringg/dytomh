@@ -9,10 +9,15 @@ spring:
     cache: false
     suffix: .html
   redis:
-   # host: 172.18.27.108
+    # host: 172.18.27.108
     host: 172.26.89.188
     password: qjf666@
     port: 6378
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      location: ../uploadFile
+      max-file-size: 20MB
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:

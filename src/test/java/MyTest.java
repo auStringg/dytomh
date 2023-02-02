@@ -17,10 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest(classes = LearnApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
@@ -165,7 +163,7 @@ public class MyTest {
             headers.add(basicHeader);
         }
         httpTaskVo.setHeaders(headers);
-        myScheduledTask.singerSignTask(httpTaskVo,3);
+        myScheduledTask.singerSignTask(httpTaskVo, 3);
     }
 
     @Test
@@ -173,7 +171,13 @@ public class MyTest {
 
         System.out.println(tranBinary("110"));
         System.out.println(tranBinary(13));
+        Boolean test = true;
+        haha(test);
+        System.out.println(test);
+    }
 
+    public void haha(Boolean b) {
+        b = false;
     }
 
     public int tranBinary(String s) {
@@ -204,7 +208,7 @@ public class MyTest {
             a = b;
             b = c;
         }
-        for (int i = a.length(); i > 0  ; i--) {
+        for (int i = a.length(); i > 0; i--) {
 
 
         }
@@ -213,7 +217,15 @@ public class MyTest {
         return ret.equals("") ? "0" : ret;
     }
 
-
+    @Test
+    public void testFil() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(2);
+        list.add(4);
+        list.stream().filter(i -> i == 2).forEach(System.out::println);
+    }
 
 
 }
