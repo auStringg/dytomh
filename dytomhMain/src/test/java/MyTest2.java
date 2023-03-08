@@ -83,11 +83,21 @@ public class MyTest2 {
 
         Field modifiersField = Field.class.getDeclaredField("modifiers");  //这里要获取Field类的modifiers字段进行修改
         modifiersField.setAccessible(true);
-        modifiersField.setInt(field,field.getModifiers()&~Modifier.FINAL);  //去除final标记
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);  //去除final标记
 
         field.setAccessible(true);
         field.set(i, 100);   //强行设置值
 
         System.out.println(i);
+    }
+
+    @Test
+    public void testMap() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("hi", "123");
+        HashMap<String, String> map2 = new HashMap<>();
+        map2.put("hi", "1234444");
+        map.putAll(map2);
+        System.out.println(map.get("hi"));
     }
 }

@@ -69,6 +69,7 @@ public class PulsoidController {
     public Pulsoid getHeartRate() throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://dev.pulsoid.net/api/v1/data/heart_rate/latest");
+        //这个已经失效了，需要换新的
         httpGet.addHeader("Authorization", "Bearer b3ae8b07-533d-472e-9fd0-10d610db393d");
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
         Pulsoid pulsoid;
