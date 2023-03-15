@@ -147,6 +147,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/xuggle/xuggle-xuggler -->
+        <!-- https://mvnrepository.com/artifact/com.xuggle/xuggle-xuggler -->
+        <dependency>
+            <groupId>xuggle</groupId>
+            <artifactId>xuggle-xuggler</artifactId>
+            <version>5.2</version>
+        </dependency>
+
 
     </dependencies>
 
