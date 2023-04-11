@@ -169,6 +169,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+        <profile>
+            <id>home</id>
+            <properties>
+                <package.environment>home</package.environment>
+            </properties>
+
+        </profile>
 
         <profile>
             <id>test</id>

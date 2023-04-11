@@ -55,7 +55,7 @@ public class MyTest2 {
         System.out.println(clazz.getSimpleName());
         System.out.println(clazz.getTypeName());
         System.out.println(clazz.getClassLoader());   //获取它的类加载器
-        System.out.println(clazz.cast(new Integer("10")));   //强制类型转换
+        System.out.println(clazz.cast(Integer.parseInt("10")));   //强制类型转换
     }
     @Test
     public void ttest3(){

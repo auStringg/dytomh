@@ -33,7 +33,7 @@ public class RedisController {
 
 
 
-    @PostMapping("/redis/{k}/{v}")
+    @PostMapping("/redis/setKey/{k}/{v}")
     public String addStringKV(@PathVariable String k,
                               @PathVariable String v) {
 

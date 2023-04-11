@@ -18,12 +18,20 @@ public class RedisTest {
     @Test
     public void testAdd(){
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        valueOperations.set("qiujf","hello");
+        valueOperations.set("qiujf", "hello");
     }
 
     @Test
-    public void testGet(){
+    public void testGet() {
         ValueOperations valueOperations = redisTemplate.opsForValue();
+        Object qiujf = valueOperations.get("qiujf");
+        System.out.println(qiujf);
+    }
+
+    @Test
+    public void testall() {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        valueOperations.set("qiujf", "hello");
         Object qiujf = valueOperations.get("qiujf");
         System.out.println(qiujf);
     }

@@ -18,6 +18,4 @@ public class BigdecimalSerializers extends Serializers.Base implements Serialize
         }
         return null;
     }
-
-
 }
