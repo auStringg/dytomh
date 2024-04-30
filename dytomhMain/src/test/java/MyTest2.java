@@ -93,11 +93,11 @@ public class MyTest2 {
 
     @Test
     public void testMap() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("hi", "123");
-        HashMap<String, String> map2 = new HashMap<>();
-        map2.put("hi", "1234444");
-        map.putAll(map2);
-        System.out.println(map.get("hi"));
+        System.out.println(1 % 3);
+        System.out.println(2 % 3);
+        System.out.println(3 % 3);
+        System.out.println((5 + 3) % 3);
+        System.out.println(Integer.MAX_VALUE);
+
     }
 }
